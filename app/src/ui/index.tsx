@@ -22,6 +22,9 @@ import {
   rebaseConflictsHandler,
   localChangesOverwrittenHandler,
   refusedWorkflowUpdate,
+  samlReauthRequired,
+  insufficientGitHubRepoPermissions,
+  schannelUnableToCheckRevocationForCertificate,
 } from './dispatcher'
 import {
   AppStore,
@@ -278,8 +281,11 @@ dispatcher.registerErrorHandler(externalEditorErrorHandler)
 dispatcher.registerErrorHandler(openShellErrorHandler)
 dispatcher.registerErrorHandler(mergeConflictHandler)
 dispatcher.registerErrorHandler(lfsAttributeMismatchHandler)
+dispatcher.registerErrorHandler(insufficientGitHubRepoPermissions)
+dispatcher.registerErrorHandler(schannelUnableToCheckRevocationForCertificate)
 dispatcher.registerErrorHandler(gitAuthenticationErrorHandler)
 dispatcher.registerErrorHandler(pushNeedsPullHandler)
+dispatcher.registerErrorHandler(samlReauthRequired)
 dispatcher.registerErrorHandler(backgroundTaskHandler)
 dispatcher.registerErrorHandler(missingRepositoryHandler)
 dispatcher.registerErrorHandler(localChangesOverwrittenHandler)
@@ -315,7 +321,7 @@ ipcRenderer.on('blur', () => {
 
 ipcRenderer.on(
   'url-action',
-  (event: Electron.IpcMessageEvent, { action }: { action: URLActionType }) => {
+  (event: Electron.IpcRendererEvent, { action }: { action: URLActionType }) => {
     dispatcher.dispatchURLAction(action)
   }
 )
